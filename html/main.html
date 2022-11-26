@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dice Adventure</title>
+    <link rel="stylesheet" href="./../css/style.css" />
+    <script type="module" src="./../js/jquery-3.6.1.js" defer></script>
+    <script type="module" src="./../js/dicegame.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Dice Adventure</h1>
+    </header>
+    <main>
+      <div class="game">
+        <div class="game-board">
+          <div class="game-ui">
+            <div class="player-ui">
+              <div class="player-health-bar">health bar</div>
+              <div class="player-attributes">attack defence</div>
+              <div class="player-current-round-power">current round power</div>
+            </div>
+            <div class="monster-ui">
+              <div class="monster-health-bar">health bar</div>
+              <div class="monster-attributes">attack defence</div>
+              <div class="monster-current-round-power">current round power</div>
+            </div>
+          </div>
+          <div>
+            <canvas class="player-img-container"></canvas>
+          </div>
+
+          <div class="combat-area"></div>
+          <div>
+            <canvas class="monster-img-container"></canvas>
+          </div>
+          <div class="round-info"></div>
+          <div class="game-log"></div>
+        </div>
+        <div class="game-controls menu-btn-container">
+          <button class="roll-btn">Roll Dice</button>
+          <button class="run-btn">Run!</button>
+        </div>
+        <div class="upgrade-ui menu-btn-container">
+          <button>stat</button>
+          <button>shop</button>
+          <button>skill</button>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>
