@@ -16,7 +16,7 @@ export function spritePositionToImagePosition(row, col, spriteWidth, spriteHeigh
 }
 
 //use this function to animate a sprite
-export function animate(targetCanvas, targetImage, targetSpriteWidth, targetSpriteHeight, targetMaxSprites, targetSpriteSpeed, targetHandler, startFrame=0, nextAnim=null)
+export function animate(targetCanvas, targetImage, targetSpriteWidth, targetSpriteHeight, targetMaxSprites, targetSpriteSpeed, targetHandler, startFrame=0, nextAnim=null, loop=true)
 {
     if(targetHandler == "player")
     {
@@ -34,20 +34,29 @@ export function animate(targetCanvas, targetImage, targetSpriteWidth, targetSpri
 
     if(frame >= targetMaxSprites-1)
     {
-        if(nextAnim != null)
+        if(nextAnim)
         {
             currentHandler = nextAnim();
             return;
         }
         else
-        {
-            frame = 0;
+        {  
+            if(loop)
+            {
+                frame = 0;
+            }
+            else
+            {
+                return;
+            }
         }
     }
     else
     {
         frame++;
     }
+
+    const spriteRaio = targetSpriteHeight/targetSpriteWidth;
 
     targetCanvas.style.height = targetCanvas.clientWidth + 'px';
 
@@ -62,12 +71,12 @@ export function animate(targetCanvas, targetImage, targetSpriteWidth, targetSpri
         0,
         0,
         targetCanvas.width,
-        targetCanvas.height
+        targetCanvas.height*spriteRaio
     );
 
 
     currentHandler = setTimeout(function(){
-        animate(targetCanvas, targetImage, targetSpriteWidth, targetSpriteHeight, targetMaxSprites, targetSpriteSpeed, targetHandler, frame, nextAnim);
+        animate(targetCanvas, targetImage, targetSpriteWidth, targetSpriteHeight, targetMaxSprites, targetSpriteSpeed, targetHandler, frame, nextAnim,loop);
     }, targetSpriteSpeed);
 
     if(targetHandler == "player")

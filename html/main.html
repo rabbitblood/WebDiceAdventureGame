@@ -13,20 +13,30 @@
       <h1>Dice Adventure</h1>
     </header>
     <main>
-      <div class="game">
-        <div class="game-board">
-          <div class="game-ui">
-            <div class="player-ui">
-              <div class="player-health-bar">health bar</div>
-              <div class="player-attributes">attack defence</div>
-              <div class="player-current-round-power">current round power</div>
+      <div class="currency">currency display area</div>
+      <!--game-->
+      <div class="game-panel">
+        <div class="game-ui normal-border">
+          <div class="player-ui normal-border">
+            <div class="player-name center-text">Player</div>
+            <div class="player-health-bar hp-bar">
+              <div class="hp-bar-fill"></div>
+              <div class="hp-bar-text"></div>
             </div>
-            <div class="monster-ui">
-              <div class="monster-health-bar">health bar</div>
-              <div class="monster-attributes">attack defence</div>
-              <div class="monster-current-round-power">current round power</div>
-            </div>
+            <div class="player-attributes">attack defence</div>
+            <div class="player-current-round-power">current round power</div>
           </div>
+          <div class="monster-ui normal-border">
+            <div class="monster-name center-text">Monster</div>
+            <div class="monster-health-bar hp-bar">
+              <div class="hp-bar-fill"></div>
+              <div class="hp-bar-text"></div>
+            </div>
+            <div class="monster-attributes">attack defence</div>
+            <div class="monster-current-round-power">current round power</div>
+          </div>
+        </div>
+        <div class="combat_backgroud normal-border">
           <div>
             <canvas class="player-img-container"></canvas>
           </div>
@@ -35,18 +45,45 @@
           <div>
             <canvas class="monster-img-container"></canvas>
           </div>
-          <div class="round-info"></div>
-          <div class="game-log"></div>
         </div>
-        <div class="game-controls menu-btn-container">
-          <button class="roll-btn">Roll Dice</button>
-          <button class="run-btn">Run!</button>
+
+        <div class="round-info normal-border"></div>
+        <div class="game-log normal-border"></div>
+        <div class="menu normal-border">
+          <div class="game-controls menu-btn-container">
+            <button class="roll-btn">Roll Dice</button>
+            <button class="new-enemy-btn">Find New Enemy</button>
+            <button class="run-btn">Run!</button>
+          </div>
+          <div class="upgrade-ui menu-btn-container">
+            <button class="stat-btn">stat</button>
+            <button class="shop-btn">shop</button>
+            <button class="skill-btn">skill</button>
+          </div>
         </div>
-        <div class="upgrade-ui menu-btn-container">
-          <button>stat</button>
-          <button>shop</button>
-          <button>skill</button>
-        </div>
+      </div>
+      <!--stat-->
+      <div class="stat-panel">
+        <div class="stat-panel-close">close panel</div>
+        <h2>stat</h2>
+        <h3>total gold earned: <span class="total-gold-earned-text"></span></h3>
+        <h3>total xp earned: <span class="total-xp-earned-text"></span></h3>
+        <h3>
+          total enemy killed: <span class="total-enemy-killed-text"></span>
+        </h3>
+        <h3>
+          total player death: <span class="total-player-death-text"></span>
+        </h3>
+      </div>
+      <!--shop-->
+      <div class="shop-panel">
+        <div class="shop-panel-close">close panel</div>
+        <h2>shop</h2>
+      </div>
+      <!--skill-->
+      <div class="skill-panel">
+        <div class="skill-panel-close">close panel</div>
+        <h2>skill</h2>
       </div>
     </main>
     <footer></footer>
