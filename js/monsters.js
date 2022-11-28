@@ -21,15 +21,15 @@ export class bat extends monster
         super("Bat", 1, 1, 1, 1, 1);
 
         this.IDLE_IMAGE         = new Image();
-        this.IDLE_IMAGE.src     = "./../image/monsters/bat/Idle.png";
+        this.IDLE_IMAGE.src     = "./../image/monsters/Bat/Idle.png";
         this.ATTACK_IMAGE       = new Image();
-        this.ATTACK_IMAGE.src   = "./../image/monsters/bat/Flying.png";
+        this.ATTACK_IMAGE.src   = "./../image/monsters/Bat/Flying.png";
         this.ROLL_IMAGE         = new Image();
-        this.ROLL_IMAGE.src     = "./../image/monsters/bat/Flying.png";
+        this.ROLL_IMAGE.src     = "./../image/monsters/Bat/Flying.png";
         this.DEFENCE_IMAGE      = new Image();
-        this.DEFENCE_IMAGE.src  = "./../image/monsters/bat/Hit.png";
+        this.DEFENCE_IMAGE.src  = "./../image/monsters/Bat/Hit.png";
         this.DEATH_IMAGE        = new Image();
-        this.DEATH_IMAGE.src    = "./../image/monsters/bat/Hit.png";
+        this.DEATH_IMAGE.src    = "./../image/monsters/Bat/Hit.png";
 
         this.SPRITE_WIDTH  = 46;
         this.SPRITE_HEIGHT = 30;
