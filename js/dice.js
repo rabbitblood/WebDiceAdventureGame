@@ -1,7 +1,7 @@
 const MAX_SIDE = 6;
 const MIN_SIDE = 1;
 
-export class dice{
+class dice{
     constructor() 
     {
         this.sides = MAX_SIDE;

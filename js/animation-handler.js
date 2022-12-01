@@ -1,9 +1,9 @@
 //handlers
-export let playerAnimationHandler;
-export let monsterAnimationHandler;
+let playerAnimationHandler;
+let monsterAnimationHandler;
 
 //use this function to get sprite position in image
-export function spritePositionToImagePosition(row, col, spriteWidth, spriteHeight) 
+function spritePositionToImagePosition(row, col, spriteWidth, spriteHeight) 
 {
     return {
         x: (
@@ -16,7 +16,7 @@ export function spritePositionToImagePosition(row, col, spriteWidth, spriteHeigh
 }
 
 //use this function to animate a sprite
-export function animate(targetCanvas, targetImage, targetSpriteWidth, targetSpriteHeight, targetMaxSprites, targetSpriteSpeed, targetHandler, startFrame=0, nextAnim=null, loop=true)
+function animate(targetCanvas, targetImage, targetSpriteWidth, targetSpriteHeight, targetMaxSprites, targetSpriteSpeed, targetHandler, startFrame=0, nextAnim=null, loop=true)
 {
     if(targetHandler == "player")
     {

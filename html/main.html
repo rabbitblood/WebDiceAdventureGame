@@ -5,10 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dice Adventure</title>
     <link rel="stylesheet" href="./../css/style.css" />
-    <script type="module" src="./../js/jquery-3.6.1.js" defer></script>
-    <script type="module" src="./../js/dicegame.js" defer></script>
+    <!-- 
+      this part should be using module and import export, 
+      but in order to display with only local files,
+      I decided to import the script in the html file one by one.
+    -->
+    <script src="./../js/jquery-3.6.1.js" defer></script>
+    <script src="./../js/three.module.js" defer></script>
+    <script src="./../js/backgroundHandler.js" defer></script>
+    <script src="./../js/monsters.js" defer></script>
+    <script src="./../js/animation-handler.js" defer></script>
+    <script src="./../js/dice.js" defer></script>
+    <script src="./../js/player.js" defer></script>
+    <script src="./../js/stat.js" defer></script>
+    <script src="./../js/dicegame.js" defer></script>
   </head>
   <body>
+    <canvas id="background-canvas"></canvas>
     <header>
       <h1>Dice Adventure</h1>
     </header>

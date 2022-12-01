@@ -1,33 +1,6 @@
-import * as monster from './monsters.js';
-import * as myAnimation from './animation-handler.js';
-import * as dice from './dice.js';
-
-
 // -------------------------------------------------constants-------------------------------------------------
 const SPRITE_ANIMATION_SPEED    = 50;
 const ROUND_BEFORE_COMBAT       = 3;
-
-//player sprite constants
-const PLAYER_IDLE_IMAGE     = new Image();
-PLAYER_IDLE_IMAGE.src       = "./../image/player/noBKG_KnightIdle_strip.png"; 
-const PLAYER_SHIELD_IMAGE   = new Image();
-PLAYER_SHIELD_IMAGE.src     = "./../image/player/noBKG_KnightShield_strip.png"; 
-const PLAYER_ROLL_IMAGE     = new Image();
-PLAYER_ROLL_IMAGE.src       = "./../image/player/noBKG_KnightRoll_strip.png"; 
-const PLAYER_ATTACK_IMAGE   = new Image();
-PLAYER_ATTACK_IMAGE.src     = "./../image/player/noBKG_KnightAttack_strip.png"; 
-const PLAYER_DEATH_IMAGE    = new Image();
-PLAYER_DEATH_IMAGE.src      = "./../image/player/noBKG_KnightDeath_strip.png"; 
-
-const PLAYER_SPRITE_WIDTH   = 64;
-const PLAYER_SPRITE_HEIGHT  = 64;
-
-const MAX_PLAYER_IDLE_SPRITES   = 15;
-const MAX_PLAYER_SHIELD_SPRITES = 9;
-const MAX_PLAYER_ROLL_SPRITES   = 15;
-const MAX_PLAYER_ATTACK_SPRITES = 22;
-const MAX_PLAYER_DEATH_SPRITES  = 15;
-
 
 // -------------------------------------------------elements-------------------------------------------------
 const $gamePanel        = $('.game-panel');
@@ -78,35 +51,29 @@ const $skillCloseBtn = $('.skill-panel-close');
 
 // -------------------------------------------------variables-------------------------------------------------
 //game
-const gameDice = new dice.dice();
-const monsterList = [new monster.bat(), new monster.rock(), new monster.chicken(), new monster.angryPig(), new monster.rino(), new monster.ghost()];
+const gameDice = new dice();
+const monsterList = [new bat(), new rock(), new chicken(), new angryPig(), new rino(), new ghost()];
+const playerData = new player();
+const statData = new stat();
+
 let currentMonster;
 
 let currentRound = 1;
 
 let moveAvaliable = true;
 
-let playerMaxHealth = 30;
-let playerHealth    = 30;
-let playerAttack    = 10;
-let playerDefence   = 0;
-let playerCurrentRoundValue = 0;
+let playerCurrentRoundValue;
 
-let monsterMaxHealth = 30;
-let monsterHealth   = 30;
-let monsterAttack   = 10;
-let monsterDefence  = 0;
-let monsterCurrentRoundValue = 0;
+let monsterMaxHealth;
+let monsterHealth;
+let monsterAttack;
+let monsterDefence;
+let monsterCurrentRoundValue;
 
 let playerXp = 0;
 let playerGold = 0;
 
-
-//stats
-let totalGoldEarned  = 0;
-let totalXpEarned    = 0;
-let totalEnemyKilled = 0;
-let totalPlayerDeath = 0;
+let endGame = false;
 
 //#region -------------------------------------------------event listeners-------------------------------------------------
 //game panel
@@ -173,8 +140,8 @@ function init()
     //init game data
     $monsterHealthBarFill.css("width", "0%");
     $playerHealthBarFill.css("width", "100%");
-    $playerHealthBarText.text(playerHealth + "/" + playerMaxHealth);
-    $playerAttibute.text(`Attack:${playerAttack} Defence:${playerDefence}`);
+    $playerHealthBarText.text(playerData.playerHealth + "/" + playerData.playerMaxHealth);
+    $playerAttibute.text(`Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`);
     $playerCurrentRoundValue.text(`Power:${playerCurrentRoundValue}`);
     $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
     playerIdleAniamte();
@@ -193,9 +160,7 @@ function newEnemy()
     moveAvaliable = true;
     $rollDiceBtn.prop('disabled', false);
 
-    playerHealth            = playerMaxHealth;
-    playerAttack            = 10;
-    playerDefence           = 0;
+    playerData.playerHealth = playerData.playerMaxHealth;
     playerCurrentRoundValue = 0;
 
     currentMonster              = monsterList[Math.floor(Math.random() * monsterList.length)];
@@ -213,7 +178,7 @@ function newEnemy()
     $playerHealthBarFill.css("width", "100%");
     $monsterHealthBarFill.css("width", "100%");
 
-    $playerAttibute.text(`Attack:${playerAttack} Defence:${playerDefence}`);
+    $playerAttibute.text(`Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`);
     $monsterAttibute.text(`Attack:${monsterAttack} Defence:${monsterDefence}`);
 
     $playerCurrentRoundValue.text(`Power: ${playerCurrentRoundValue}`);
@@ -221,7 +186,7 @@ function newEnemy()
 
     $monsterName.text(currentMonster.name);
 
-    $playerHealthBarText.text(playerHealth + "/" + playerMaxHealth);
+    $playerHealthBarText.text(playerData.playerHealth + "/" + playerData.playerMaxHealth);
     $monsterHealthBarText.text(monsterHealth + "/" + monsterMaxHealth);
 
     //display monster animation
@@ -272,7 +237,7 @@ function rollDice()
     playerRollAnimate();
 
     //monster rolling after player
-    const playerAnimationTime = MAX_PLAYER_ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
+    const playerAnimationTime = playerData.MAX_PLAYER_ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
     setTimeout(monsterRoll, playerAnimationTime);
     
     const monsterAnimationTime = currentMonster.ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
@@ -314,7 +279,7 @@ function combat()
     }
     else if(playerCurrentRoundValue > monsterCurrentRoundValue)
     {
-        let damage = playerAttack - monsterDefence;
+        let damage = playerData.playerAttack - monsterDefence;
         if(damage < 0)
         {
             damage = 0;
@@ -331,13 +296,13 @@ function combat()
     }
     else if(playerCurrentRoundValue < monsterCurrentRoundValue)
     {
-        let damage = monsterAttack - playerDefence;
+        let damage = monsterAttack - playerData.playerDefence;
         if(damage < 0)
         {
             damage = 0;
         }
 
-        playerHealth -= damage;
+        playerData.playerHealth -= damage;
         displayGameLog(`Your power is ${playerCurrentRoundValue}, the ${currentMonster.name}'s power is ${monsterCurrentRoundValue}, you Lose!`);
         displayGameLog(`The ${currentMonster.name} hit you for ${damage} damage`, "monster");
         combatResult = "monster";
@@ -348,16 +313,16 @@ function combat()
     }
 
     //update UI
-    $playerHealthBarFill.css("width", `${playerHealth/playerMaxHealth*100}%`);
+    $playerHealthBarFill.css("width", `${playerData.playerHealth/playerData.playerMaxHealth*100}%`);
     $monsterHealthBarFill.css("width", `${monsterHealth/monsterMaxHealth*100}%`);
-    $playerHealthBarText.text(playerHealth + "/" + playerMaxHealth);
+    $playerHealthBarText.text(playerData.playerHealth + "/" + playerData.playerMaxHealth);
     $monsterHealthBarText.text(monsterHealth + "/" + monsterMaxHealth);
 
     //animation when rolling dice
     let animationWaitTime = 0;
     if(combatResult == "player")
     {
-        animationWaitTime = MAX_PLAYER_ATTACK_SPRITES * SPRITE_ANIMATION_SPEED;
+        animationWaitTime = playerData.MAX_PLAYER_ATTACK_SPRITES * SPRITE_ANIMATION_SPEED;
         playerAttackAnimate();
         monsterDefenceAnimate();
     }
@@ -370,7 +335,7 @@ function combat()
 
     setTimeout(function(){
         //if player or monster health is 0, current game over
-        if(playerHealth <= 0)
+        if(playerData.playerHealth <= 0)
         {
             displayGameLog("You are defeated, lost all gold and xp", "monster");
             playerDeathAniamte();
@@ -381,7 +346,7 @@ function combat()
             playerXp = 0;
 
             //update life time stats
-            totalPlayerDeath++;
+            statData.totalPlayerDeath++;
 
             //display combat visual
             $combatArea.empty();
@@ -399,11 +364,12 @@ function combat()
         {
             displayGameLog(`You killed the ${currentMonster.name}`);
             displayGameLog(`monster dropped ${currentMonster.gold} gold, you gained ${currentMonster.xp} xp`);
-            if(currentMonster.name == "Ghost")
+            if(currentMonster.name == "Ghost" && endGame == false)
             {
                 displayGameLog(`You have defeated the ghost, the ultimate monster. I believe you are just boring as me, the devoloper who made this game`);
                 displayGameLog(`This is actaully my final project for my web development course, I hope you like it, and I hope you have a good day`);
                 displayGameLog(`You have won the game, congrats!`);
+                endGame = true;
             }
 
             monsterDeathAnimate();
@@ -414,9 +380,9 @@ function combat()
             playerXp += currentMonster.xp;
 
             //update life time stats
-            totalEnemyKilled++;
-            totalGoldEarned += currentMonster.gold;
-            totalXpEarned += currentMonster.xp;
+            statData.totalEnemyKilled++;
+            statData.totalGoldEarned += currentMonster.gold;
+            statData.totalXpEarned += currentMonster.xp;
 
             //display combat visual
             $combatArea.empty();
@@ -510,7 +476,7 @@ function displayGameLog(displayText, logSource="player")
 function run()
 {
     displayGameLog(`You got scared by ${currentMonster.name} and ran away`);
-    clearTimeout(myAnimation.monsterAnimationHandler);
+    clearTimeout(monsterAnimationHandler);
 
     //clear monster UI
     $monsterHealthBarFill.css("width", "0%");
@@ -534,10 +500,10 @@ function showStatPanel()
     $statPanel.show();
 
     //update stat panel information
-    $totalGoldEarnedText.text(`${totalGoldEarned}`);
-    $totalXpEarnedText.text(`${totalXpEarned}`);
-    $totalEnemyKilledText.text(`${totalEnemyKilled}`);
-    $totalPlayerDeathText.text(`${totalPlayerDeath}`);
+    $totalGoldEarnedText.text(`${statData.totalGoldEarned}`);
+    $totalXpEarnedText.text(`${statData.totalXpEarned}`);
+    $totalEnemyKilledText.text(`${statData.totalEnemyKilled}`);
+    $totalPlayerDeathText.text(`${statData.totalPlayerDeath}`);
     
 }
 //#endregion
@@ -545,14 +511,14 @@ function showStatPanel()
 //#region ----------------------------------------------------------animation template functions----------------------------------------------------------
 function playerIdleAniamte()
 {
-    clearTimeout(myAnimation.playerAnimationHandler);
+    clearTimeout(playerAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         playerImgContainer,
-        PLAYER_IDLE_IMAGE,
-        PLAYER_SPRITE_WIDTH,
-        PLAYER_SPRITE_HEIGHT,
-        MAX_PLAYER_IDLE_SPRITES,
+        playerData.PLAYER_IDLE_IMAGE,
+        playerData.PLAYER_SPRITE_WIDTH,
+        playerData.PLAYER_SPRITE_HEIGHT,
+        playerData.MAX_PLAYER_IDLE_SPRITES,
         SPRITE_ANIMATION_SPEED,
         "player"
     );
@@ -560,14 +526,14 @@ function playerIdleAniamte()
 
 function playerDeathAniamte()
 {
-    clearTimeout(myAnimation.playerAnimationHandler);
+    clearTimeout(playerAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         playerImgContainer,
-        PLAYER_DEATH_IMAGE,
-        PLAYER_SPRITE_WIDTH,
-        PLAYER_SPRITE_HEIGHT,
-        MAX_PLAYER_DEATH_SPRITES,
+        playerData.PLAYER_DEATH_IMAGE,
+        playerData.PLAYER_SPRITE_WIDTH,
+        playerData.PLAYER_SPRITE_HEIGHT,
+        playerData.MAX_PLAYER_DEATH_SPRITES,
         SPRITE_ANIMATION_SPEED,
         "player",
         0,
@@ -578,14 +544,14 @@ function playerDeathAniamte()
 
 function playerShieldAnimate()
 {
-    clearTimeout(myAnimation.playerAnimationHandler);
+    clearTimeout(playerAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         playerImgContainer,
-        PLAYER_SHIELD_IMAGE,
-        PLAYER_SPRITE_WIDTH,
-        PLAYER_SPRITE_HEIGHT,
-        MAX_PLAYER_SHIELD_SPRITES,
+        playerData.PLAYER_SHIELD_IMAGE,
+        playerData.PLAYER_SPRITE_WIDTH,
+        playerData.PLAYER_SPRITE_HEIGHT,
+        playerData.MAX_PLAYER_SHIELD_SPRITES,
         SPRITE_ANIMATION_SPEED,
         "player",
         0,
@@ -595,14 +561,14 @@ function playerShieldAnimate()
 
 function playerRollAnimate()
 {
-    clearTimeout(myAnimation.playerAnimationHandler);
+    clearTimeout(playerAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         playerImgContainer,
-        PLAYER_ROLL_IMAGE,
-        PLAYER_SPRITE_WIDTH,
-        PLAYER_SPRITE_HEIGHT,
-        MAX_PLAYER_ROLL_SPRITES,
+        playerData.PLAYER_ROLL_IMAGE,
+        playerData.PLAYER_SPRITE_WIDTH,
+        playerData.PLAYER_SPRITE_HEIGHT,
+        playerData.MAX_PLAYER_ROLL_SPRITES,
         SPRITE_ANIMATION_SPEED,
         "player",
         0,
@@ -612,14 +578,14 @@ function playerRollAnimate()
 
 function playerAttackAnimate()
 {
-    clearTimeout(myAnimation.playerAnimationHandler);
+    clearTimeout(playerAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         playerImgContainer,
-        PLAYER_ATTACK_IMAGE,
-        PLAYER_SPRITE_WIDTH,
-        PLAYER_SPRITE_HEIGHT,
-        MAX_PLAYER_ATTACK_SPRITES,
+        playerData.PLAYER_ATTACK_IMAGE,
+        playerData.PLAYER_SPRITE_WIDTH,
+        playerData.PLAYER_SPRITE_HEIGHT,
+        playerData.MAX_PLAYER_ATTACK_SPRITES,
         SPRITE_ANIMATION_SPEED,
         "player",
         0,
@@ -629,9 +595,9 @@ function playerAttackAnimate()
 
 function monsterIdleAniamte()
 {
-    clearTimeout(myAnimation.monsterAnimationHandler);
+    clearTimeout(monsterAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         monsterImgContainer,
         currentMonster.IDLE_IMAGE,
         currentMonster.SPRITE_WIDTH,
@@ -644,9 +610,9 @@ function monsterIdleAniamte()
 
 function monsterAttackAnimate()
 {
-    clearTimeout(myAnimation.monsterAnimationHandler);
+    clearTimeout(monsterAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         monsterImgContainer,
         currentMonster.ATTACK_IMAGE,
         currentMonster.SPRITE_WIDTH,
@@ -661,9 +627,9 @@ function monsterAttackAnimate()
 
 function monsterRollAnimate()
 {
-    clearTimeout(myAnimation.monsterAnimationHandler);
+    clearTimeout(monsterAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         monsterImgContainer,
         currentMonster.ROLL_IMAGE,
         currentMonster.SPRITE_WIDTH,
@@ -678,9 +644,9 @@ function monsterRollAnimate()
 
 function monsterDefenceAnimate()
 {
-    clearTimeout(myAnimation.monsterAnimationHandler);
+    clearTimeout(monsterAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         monsterImgContainer,
         currentMonster.DEFENCE_IMAGE,
         currentMonster.SPRITE_WIDTH,
@@ -695,9 +661,9 @@ function monsterDefenceAnimate()
 
 function monsterDeathAnimate()
 {
-    clearTimeout(myAnimation.monsterAnimationHandler);
+    clearTimeout(monsterAnimationHandler);
 
-    myAnimation.animate(
+    animate(
         monsterImgContainer,
         currentMonster.DEATH_IMAGE,
         currentMonster.SPRITE_WIDTH,

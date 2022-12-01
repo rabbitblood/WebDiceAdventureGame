@@ -1,5 +1,5 @@
 
-export class monster 
+class monster 
 {
     constructor(name, health, attack, defence, xp, gold) 
     {
@@ -14,7 +14,7 @@ export class monster
 
 
 //some monster templates
-export class bat extends monster
+class bat extends monster
 {
     constructor()
     {
@@ -43,7 +43,7 @@ export class bat extends monster
     
 }
 
-export class rock extends monster
+class rock extends monster
 {
     constructor()
     {
@@ -71,7 +71,7 @@ export class rock extends monster
     }
 }
 
-export class chicken extends monster
+class chicken extends monster
 {
     constructor()
     {
@@ -99,7 +99,7 @@ export class chicken extends monster
     }
 }
 
-export class angryPig extends monster
+class angryPig extends monster
 {
     constructor()
     {
@@ -127,7 +127,7 @@ export class angryPig extends monster
     }
 }
 
-export class rino extends monster
+class rino extends monster
 {
     constructor()
     {
@@ -155,7 +155,7 @@ export class rino extends monster
     }
 }
 
-export class ghost extends monster
+class ghost extends monster
 {
     constructor()
     {
