@@ -34,12 +34,21 @@ img {
 .game-panel,
 .stat-panel,
 .skill-panel,
-.shop-panel {
+.shop-panel,
+.how-panel {
   max-width: 800px;
   margin: 0 auto;
   border: 5px solid black;
   padding: 5px;
   background-color: #f5f5f5;
+}
+.game-panel h2,
+.stat-panel h2,
+.skill-panel h2,
+.shop-panel h2,
+.how-panel h2 {
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .game-panel {
@@ -159,12 +168,13 @@ canvas {
 button {
   width: 150px;
   height: 50px;
-  font-size: 1.2em;
+  font-size: 1em;
   font-weight: 700;
   border-radius: 10px;
   border: 1px solid black;
   background-color: #f5f5f5;
   cursor: pointer;
+  text-transform: uppercase;
 }
 button:focus {
   outline: none;
@@ -255,7 +265,17 @@ button:hover {
 
 .skill-panel-close,
 .shop-panel-close,
-.stat-panel-close {
+.stat-panel-close,
+.how-panel-close {
   cursor: pointer;
   font-size: 2em;
+  text-align: end;
+}
+
+.how-btn {
+  background-color: pink;
+}
+
+p {
+  margin: 10px;
 }/*# sourceMappingURL=style.css.map */
