@@ -245,8 +245,6 @@ button:hover {
 .skill-item,
 .shop-item {
   display: flex;
-  justify-content: center;
-  align-items: center;
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid black;
@@ -254,7 +252,7 @@ button:hover {
 }
 .skill-item > *,
 .shop-item > * {
-  width: 50%;
+  width: calc(50% - 10px);
   text-align: center;
   padding: 10px;
 }

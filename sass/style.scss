@@ -231,14 +231,14 @@ button {
 }
 .skill-item,
 .shop-item {
-  @include flex-center;
+  display: flex;
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid black;
   flex-wrap: wrap;
 
   > * {
-    width: 50%;
+    width: calc(50% - 10px);
     text-align: center;
     padding: 10px;
   }
