@@ -183,9 +183,7 @@ button:hover {
   text-align: center;
   width: 100%;
   align-items: center;
-  padding: 10px;
   font-size: 1.5em;
-  margin-top: 10px;
   max-width: 800px;
   border: 5px solid black;
 }
@@ -253,4 +251,11 @@ button:hover {
 
 .img-preload-container {
   display: none;
+}
+
+.skill-panel-close,
+.shop-panel-close,
+.stat-panel-close {
+  cursor: pointer;
+  font-size: 2em;
 }/*# sourceMappingURL=style.css.map */
