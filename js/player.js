@@ -3,25 +3,25 @@ class player{
     {
 
         this.playerMaxHealth = 30;
-        this.playerHealth    = 30;
+        this.playerHealth    = this.playerMaxHealth;
         this.playerAttack    = 10;
         this.playerDefence   = 0;
 
 
-        this.PLAYER_IDLE_IMAGE     = new Image();
-        this.PLAYER_IDLE_IMAGE.src       = "./../image/player/noBKG_KnightIdle_strip.png"; 
+        this.PLAYER_IDLE_IMAGE          = new Image();
+        this.PLAYER_IDLE_IMAGE.src      = "./../image/player/noBKG_KnightIdle_strip.png"; 
 
-        this.PLAYER_SHIELD_IMAGE   = new Image();
-        this.PLAYER_SHIELD_IMAGE.src     = "./../image/player/noBKG_KnightShield_strip.png"; 
+        this.PLAYER_SHIELD_IMAGE        = new Image();
+        this.PLAYER_SHIELD_IMAGE.src    = "./../image/player/noBKG_KnightShield_strip.png"; 
 
-        this.PLAYER_ROLL_IMAGE     = new Image();
-        this.PLAYER_ROLL_IMAGE.src       = "./../image/player/noBKG_KnightRoll_strip.png"; 
+        this.PLAYER_ROLL_IMAGE          = new Image();
+        this.PLAYER_ROLL_IMAGE.src      = "./../image/player/noBKG_KnightRoll_strip.png"; 
 
-        this.PLAYER_ATTACK_IMAGE   = new Image();
-        this.PLAYER_ATTACK_IMAGE.src     = "./../image/player/noBKG_KnightAttack_strip.png"; 
+        this.PLAYER_ATTACK_IMAGE        = new Image();
+        this.PLAYER_ATTACK_IMAGE.src    = "./../image/player/noBKG_KnightAttack_strip.png"; 
 
-        this.PLAYER_DEATH_IMAGE    = new Image();
-        this.PLAYER_DEATH_IMAGE.src      = "./../image/player/noBKG_KnightDeath_strip.png"; 
+        this.PLAYER_DEATH_IMAGE         = new Image();
+        this.PLAYER_DEATH_IMAGE.src     = "./../image/player/noBKG_KnightDeath_strip.png"; 
         
 
         this.PLAYER_SPRITE_WIDTH   = 64;

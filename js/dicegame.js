@@ -1,60 +1,94 @@
 // -------------------------------------------------constants-------------------------------------------------
-const SPRITE_ANIMATION_SPEED    = 50;
-const ROUND_BEFORE_COMBAT       = 3;
+const SPRITE_ANIMATION_SPEED = 50;
+const ROUND_BEFORE_COMBAT = 3;
 
 // -------------------------------------------------elements-------------------------------------------------
-const $gamePanel        = $('.game-panel');
-const $statPanel        = $('.stat-panel');
-const $shopPanel        = $('.shop-panel');
-const $skillPanel       = $('.skill-panel');
-const $currencyDisplay  = $('.currency');
+const $gamePanel = $(".game-panel");
+const $statPanel = $(".stat-panel");
+const $shopPanel = $(".shop-panel");
+const $skillPanel = $(".skill-panel");
+const $currencyDisplay = $(".currency");
 
 //game panel
 const $rollDiceBtn = $(".roll-btn");
-const $runBtn      = $(".run-btn");
+const $runBtn = $(".run-btn");
 const $newEnemyBtn = $(".new-enemy-btn");
-const $gameLog     = $(".game-log");
-const $combatArea  = $('.combat-area');
-const $roundInfo   = $('.round-info');
+const $gameLog = $(".game-log");
+const $combatArea = $(".combat-area");
+const $roundInfo = $(".round-info");
 
-const $statBtn = $('.stat-btn');
-const $shopBtn = $('.shop-btn');
-const $skillBtn = $('.skill-btn');
+const $statBtn = $(".stat-btn");
+const $shopBtn = $(".shop-btn");
+const $skillBtn = $(".skill-btn");
 
-const $playerHealthBarText      = $('.player-health-bar .hp-bar-text');
-const $playerHealthBarFill      = $('.player-health-bar .hp-bar-fill');
-const $playerAttibute           = $('.player-attributes');
-const $playerCurrentRoundValue  = $('.player-current-round-power');
+const $playerHealthBarText = $(".player-health-bar .hp-bar-text");
+const $playerHealthBarFill = $(".player-health-bar .hp-bar-fill");
+const $playerAttibute = $(".player-attributes");
+const $playerCurrentRoundValue = $(".player-current-round-power");
 
-const $monsterName              = $('.monster-name');
-const $monsterHealthBarText     = $('.monster-health-bar .hp-bar-text');
-const $monsterHealthBarFill     = $('.monster-health-bar .hp-bar-fill');
-const $monsterAttibute          = $('.monster-attributes');
-const $monsterCurrentRoundValue = $('.monster-current-round-power');
+const $monsterName = $(".monster-name");
+const $monsterHealthBarText = $(".monster-health-bar .hp-bar-text");
+const $monsterHealthBarFill = $(".monster-health-bar .hp-bar-fill");
+const $monsterAttibute = $(".monster-attributes");
+const $monsterCurrentRoundValue = $(".monster-current-round-power");
 
-const playerImgContainer    = document.querySelector('.player-img-container');
-const monsterImgContainer   = document.querySelector('.monster-img-container');
+const playerImgContainer = document.querySelector(".player-img-container");
+const monsterImgContainer = document.querySelector(".monster-img-container");
 
 //stat panel
-const $statCloseBtn = $('.stat-panel-close');
+const $statCloseBtn = $(".stat-panel-close");
 
-const $totalGoldEarnedText = $('.total-gold-earned-text');
-const $totalXpEarnedText = $('.total-xp-earned-text');
-const $totalEnemyKilledText = $('.total-enemy-killed-text');
-const $totalPlayerDeathText = $('.total-player-death-text');
+const $totalGoldEarnedText = $(".total-gold-earned-text");
+const $totalXpEarnedText = $(".total-xp-earned-text");
+const $totalEnemyKilledText = $(".total-enemy-killed-text");
+const $totalPlayerDeathText = $(".total-player-death-text");
 
 //shop panel
-const $shopCloseBtn = $('.shop-panel-close');
+const $shopCloseBtn = $(".shop-panel-close");
+const $shopItemContainer = $(".shop-item-container");
 
 //skill panel
-const $skillCloseBtn = $('.skill-panel-close');
+const $skillCloseBtn = $(".skill-panel-close");
+const $skillItemContainer = $(".skill-container");
 
 // -------------------------------------------------variables-------------------------------------------------
-//game
+//game data
 const gameDice = new dice();
-const monsterList = [new bat(), new rock(), new chicken(), new angryPig(), new rino(), new ghost()];
+const monsterList = [
+    new bat(),
+    new rock(),
+    new chicken(),
+    new angryPig(),
+    new rino(),
+    new ghost()
+];
 const playerData = new player();
 const statData = new stat();
+const shop = [
+    new longSword(playerData),
+    new diamondSword(playerData),
+    new heroSword(playerData),
+    new kingsbane(playerData),
+    new godSlayer(playerData),
+    new shield(playerData),
+    new armour(playerData),
+    new enhancedSteelPlate(playerData),
+    new divineHelmet(playerData),
+    new angelsBone(playerData),
+    new healthPotion(playerData),
+    new meatStew(playerData),
+    new krakenSoup(playerData),
+    new giantWine(playerData),
+    new gaeaEssence(playerData)
+];
+const skillList = [
+    new increasePower(),
+    new superIncreasePower(),
+    new diceMaster(),
+    new evenBetter(),
+    new luckyCharm(),
+    new undeadKing()
+];
 
 let currentMonster;
 
@@ -77,61 +111,64 @@ let endGame = false;
 
 //#region -------------------------------------------------event listeners-------------------------------------------------
 //game panel
-$rollDiceBtn.on('click', function(){if(moveAvaliable){rollDice()}});
+$rollDiceBtn.on("click", function () {
+    if (moveAvaliable) {
+        rollDice();
+    }
+});
 
-$runBtn.on('click', function(){
-    if(moveAvaliable)
-    {
+$runBtn.on("click", function () {
+    if (moveAvaliable) {
         run();
     }
 });
 
-$newEnemyBtn.on('click', function(){
+$newEnemyBtn.on("click", function () {
     $rollDiceBtn.show();
     $runBtn.show();
     newEnemy();
 });
 
-$statBtn.on('click', function(){
+$statBtn.on("click", function () {
     $gamePanel.hide();
     showStatPanel();
 });
 
-$shopBtn.on('click', function(){
+$shopBtn.on("click", function () {
     $gamePanel.hide();
     $shopPanel.show();
+    refreshShopItems();
 });
 
-$skillBtn.on('click', function(){
+$skillBtn.on("click", function () {
     $gamePanel.hide();
     $skillPanel.show();
+    refreshSkillPanel();
 });
 
 //stat panel
-$statCloseBtn.on('click', function(){
+$statCloseBtn.on("click", function () {
     $statPanel.hide();
     $gamePanel.show();
 });
 
 //shop panel
-$shopCloseBtn.on('click', function(){
+$shopCloseBtn.on("click", function () {
     $shopPanel.hide();
     $gamePanel.show();
 });
 
 //skill panel
-$skillCloseBtn.on('click', function(){
+$skillCloseBtn.on("click", function () {
     $skillPanel.hide();
     $gamePanel.show();
 });
 //#endregion
 
-
 //-------------------------------------------------functions-------------------------------------------------
 init();
 
-function init()
-{
+function init() {
     $gamePanel.show();
     $statPanel.hide();
     $shopPanel.hide();
@@ -140,35 +177,37 @@ function init()
     //init game data
     $monsterHealthBarFill.css("width", "0%");
     $playerHealthBarFill.css("width", "100%");
-    $playerHealthBarText.text(playerData.playerHealth + "/" + playerData.playerMaxHealth);
-    $playerAttibute.text(`Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`);
+    $playerHealthBarText.text(
+        playerData.playerHealth + "/" + playerData.playerMaxHealth
+    );
+    $playerAttibute.text(
+        `Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`
+    );
     $playerCurrentRoundValue.text(`Power:${playerCurrentRoundValue}`);
     $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
     playerIdleAniamte();
-    
-    
+
     $newEnemyBtn.show();
     $rollDiceBtn.hide();
     $runBtn.hide();
 }
 
 //#region gamepanel
-function newEnemy()
-{
+function newEnemy() {
     //init game data
     currentRound = 1;
     moveAvaliable = true;
-    $rollDiceBtn.prop('disabled', false);
+    $rollDiceBtn.prop("disabled", false);
 
     playerData.playerHealth = playerData.playerMaxHealth;
     playerCurrentRoundValue = 0;
 
-    currentMonster              = monsterList[Math.floor(Math.random() * monsterList.length)];
-    monsterMaxHealth            = currentMonster.health;
-    monsterHealth               = monsterMaxHealth;
-    monsterAttack               = currentMonster.attack;
-    monsterDefence              = currentMonster.defense;
-    monsterCurrentRoundValue    = 0;
+    currentMonster = monsterList[Math.floor(Math.random() * monsterList.length)];
+    monsterMaxHealth = currentMonster.health;
+    monsterHealth = monsterMaxHealth;
+    monsterAttack = currentMonster.attack;
+    monsterDefence = currentMonster.defense;
+    monsterCurrentRoundValue = 0;
 
     displayGameLog(`You encountered a ${currentMonster.name}`);
 
@@ -178,7 +217,9 @@ function newEnemy()
     $playerHealthBarFill.css("width", "100%");
     $monsterHealthBarFill.css("width", "100%");
 
-    $playerAttibute.text(`Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`);
+    $playerAttibute.text(
+        `Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`
+    );
     $monsterAttibute.text(`Attack:${monsterAttack} Defence:${monsterDefence}`);
 
     $playerCurrentRoundValue.text(`Power: ${playerCurrentRoundValue}`);
@@ -186,7 +227,9 @@ function newEnemy()
 
     $monsterName.text(currentMonster.name);
 
-    $playerHealthBarText.text(playerData.playerHealth + "/" + playerData.playerMaxHealth);
+    $playerHealthBarText.text(
+        playerData.playerHealth + "/" + playerData.playerMaxHealth
+    );
     $monsterHealthBarText.text(monsterHealth + "/" + monsterMaxHealth);
 
     //display monster animation
@@ -196,39 +239,36 @@ function newEnemy()
     $roundInfo.empty();
 }
 
-
-function rollDice() 
-{
+function rollDice() {
     moveAvaliable = false;
-    $rollDiceBtn.prop('disabled', true);
+    $rollDiceBtn.prop("disabled", true);
 
     const rollingDice1 = gameDice.roll();
     const rollingDice2 = gameDice.roll();
 
     //roll dice game logic
-    const roundValue = getRoundValue(rollingDice1, rollingDice2);
+    const roundValue = getRoundValue(rollingDice1, rollingDice2, "player");
     playerCurrentRoundValue += roundValue;
 
-    //display log
-    displayGameLog(`You rolled a ${rollingDice1} and a ${rollingDice2}, your round value is ${roundValue}`);
+
 
     //display combat visual
     $combatArea.empty();
-    $combatArea.append(`<div>${gameDice.getDiceFace(rollingDice1).outerHTML}</div>`);
-    $combatArea.append(`<div>${gameDice.getDiceFace(rollingDice2).outerHTML}</div>`);
+    $combatArea.append(
+        `<div>${gameDice.getDiceFace(rollingDice1).outerHTML}</div>`
+    );
+    $combatArea.append(
+        `<div>${gameDice.getDiceFace(rollingDice2).outerHTML}</div>`
+    );
 
     //UI Update
     $playerCurrentRoundValue.text(`Power: ${playerCurrentRoundValue}`);
 
     $roundInfo.empty();
-    for(let i = 1; i <= currentRound; i++)
-    {
-        if(i == ROUND_BEFORE_COMBAT)
-        {
+    for (let i = 1; i <= currentRound; i++) {
+        if (i == ROUND_BEFORE_COMBAT) {
             $roundInfo.append(`<div class="round-ball red-b">${i}</div>`);
-        }
-        else
-        {
+        } else {
             $roundInfo.append(`<div class="round-ball">${i}</div>`);
         }
     }
@@ -237,74 +277,81 @@ function rollDice()
     playerRollAnimate();
 
     //monster rolling after player
-    const playerAnimationTime = playerData.MAX_PLAYER_ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
+    const playerAnimationTime =
+        playerData.MAX_PLAYER_ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
     setTimeout(monsterRoll, playerAnimationTime);
-    
-    const monsterAnimationTime = currentMonster.ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
-    setTimeout(function(){
-        if(currentRound >= ROUND_BEFORE_COMBAT)
-        {
+
+    const monsterAnimationTime =
+        currentMonster.ROLL_SPRITES * SPRITE_ANIMATION_SPEED;
+    setTimeout(function () {
+        if (currentRound >= ROUND_BEFORE_COMBAT) {
             combat();
             currentRound = 1;
             playerCurrentRoundValue = 0;
             monsterCurrentRoundValue = 0;
-        }
-        else
-        {
+        } else {
             currentRound++;
             moveAvaliable = true;
-            $rollDiceBtn.prop('disabled', false);
+            $rollDiceBtn.prop("disabled", false);
         }
-
     }, playerAnimationTime + monsterAnimationTime);
-
 }
 
-function combat()
-{
+function combat() {
     let combatResult;
 
-    if(playerCurrentRoundValue ==  monsterCurrentRoundValue)
-    {
-        displayGameLog(`You and the ${currentMonster.name} have same power of ${playerCurrentRoundValue}, no one takes damage`);
+    //before combat skill
+    for (const skill of skillList) {
+        if (skill.skillTiming == "beforeCombat" &&
+            skill.bought == true) {
+            skill.skillFunction();
+        }
+    }
+
+    //combat logic
+    if (playerCurrentRoundValue == monsterCurrentRoundValue) {
+        displayGameLog(
+            `You and the ${currentMonster.name} have same power of ${playerCurrentRoundValue}, no one takes damage`
+        );
         combatResult = "draw";
         moveAvaliable = true;
-        $rollDiceBtn.prop('disabled', false);
+        $rollDiceBtn.prop("disabled", false);
 
         //display combat visual
         $combatArea.empty();
         $combatArea.append(`<h2>DRAW</h2>`);
 
         return;
-    }
-    else if(playerCurrentRoundValue > monsterCurrentRoundValue)
-    {
+    } else if (playerCurrentRoundValue > monsterCurrentRoundValue) {
         let damage = playerData.playerAttack - monsterDefence;
-        if(damage < 0)
-        {
+        if (damage < 0) {
             damage = 0;
         }
 
         monsterHealth -= damage;
-        displayGameLog(`Your power is ${playerCurrentRoundValue}, the ${currentMonster.name}'s power is ${monsterCurrentRoundValue}, you Win!`);
-        displayGameLog(`You hit the ${currentMonster.name} for ${damage} damage`);
+        displayGameLog(
+            `Your power is ${playerCurrentRoundValue}, the ${currentMonster.name}'s power is ${monsterCurrentRoundValue}, you Win!`
+        );
+        displayGameLog(`⚔️You hit the ${currentMonster.name} for ${damage} damage`);
         combatResult = "player";
 
         //display combat visual
         $combatArea.empty();
         $combatArea.append(`<h2>WIN</h2>`);
-    }
-    else if(playerCurrentRoundValue < monsterCurrentRoundValue)
-    {
+    } else if (playerCurrentRoundValue < monsterCurrentRoundValue) {
         let damage = monsterAttack - playerData.playerDefence;
-        if(damage < 0)
-        {
+        if (damage < 0) {
             damage = 0;
         }
 
         playerData.playerHealth -= damage;
-        displayGameLog(`Your power is ${playerCurrentRoundValue}, the ${currentMonster.name}'s power is ${monsterCurrentRoundValue}, you Lose!`);
-        displayGameLog(`The ${currentMonster.name} hit you for ${damage} damage`, "monster");
+        displayGameLog(
+            `Your power is ${playerCurrentRoundValue}, the ${currentMonster.name}'s power is ${monsterCurrentRoundValue}, you Lose!`
+        );
+        displayGameLog(
+            `⚔️The ${currentMonster.name} hit you for ${damage} damage`,
+            "monster"
+        );
         combatResult = "monster";
 
         //display combat visual
@@ -313,31 +360,37 @@ function combat()
     }
 
     //update UI
-    $playerHealthBarFill.css("width", `${playerData.playerHealth/playerData.playerMaxHealth*100}%`);
-    $monsterHealthBarFill.css("width", `${monsterHealth/monsterMaxHealth*100}%`);
-    $playerHealthBarText.text(playerData.playerHealth + "/" + playerData.playerMaxHealth);
+    $playerCurrentRoundValue.text(`Power: ${playerCurrentRoundValue}`);
+    $playerHealthBarFill.css(
+        "width",
+        `${(playerData.playerHealth / playerData.playerMaxHealth) * 100}%`
+    );
+    $monsterHealthBarFill.css(
+        "width",
+        `${(monsterHealth / monsterMaxHealth) * 100}%`
+    );
+    $playerHealthBarText.text(
+        playerData.playerHealth + "/" + playerData.playerMaxHealth
+    );
     $monsterHealthBarText.text(monsterHealth + "/" + monsterMaxHealth);
 
     //animation when rolling dice
     let animationWaitTime = 0;
-    if(combatResult == "player")
-    {
-        animationWaitTime = playerData.MAX_PLAYER_ATTACK_SPRITES * SPRITE_ANIMATION_SPEED;
+    if (combatResult == "player") {
+        animationWaitTime =
+            playerData.MAX_PLAYER_ATTACK_SPRITES * SPRITE_ANIMATION_SPEED;
         playerAttackAnimate();
         monsterDefenceAnimate();
-    }
-    else
-    {
+    } else {
         animationWaitTime = currentMonster.ATTACK_SPRITES * SPRITE_ANIMATION_SPEED;
         playerShieldAnimate();
         monsterAttackAnimate();
     }
 
-    setTimeout(function(){
+    setTimeout(function () {
         //if player or monster health is 0, current game over
-        if(playerData.playerHealth <= 0)
-        {
-            displayGameLog("You are defeated, lost all gold and xp", "monster");
+        if (playerData.playerHealth <= 0) {
+            displayGameLog("☠️You are defeated, lost all gold and xp", "monster");
             playerDeathAniamte();
             $rollDiceBtn.hide();
             $runBtn.hide();
@@ -355,20 +408,22 @@ function combat()
             //update ui
             $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
 
-            setTimeout(function(){
+            setTimeout(function () {
                 $newEnemyBtn.show();
             }, animationWaitTime);
             return;
-        }
-        else if(monsterHealth <= 0)
-        {
-            displayGameLog(`You killed the ${currentMonster.name}`);
-            displayGameLog(`monster dropped ${currentMonster.gold} gold, you gained ${currentMonster.xp} xp`);
-            if(currentMonster.name == "Ghost" && endGame == false)
-            {
-                displayGameLog(`You have defeated the ghost, the ultimate monster. I believe you are just boring as me, the devoloper who made this game`);
-                displayGameLog(`This is actaully my final project for my web development course, I hope you like it, and I hope you have a good day`);
-                displayGameLog(`You have won the game, congrats!`);
+        } else if (monsterHealth <= 0) {
+            displayGameLog(
+                `💰You killed the ${currentMonster.name}, it dropped ${currentMonster.gold} gold, you gained ${currentMonster.xp} xp`
+            );
+            if (currentMonster.name == "Ghost" && endGame == false) {
+                displayGameLog(
+                    `You have defeated the ghost, the ultimate monster. I believe you are just boring as me, the devoloper who made this game`
+                );
+                displayGameLog(
+                    `This is actaully my final project for my web development course, I hope you like it, and I hope you have a good day`
+                );
+                displayGameLog(`🎖️You have won the game, congrats!`);
                 endGame = true;
             }
 
@@ -391,7 +446,7 @@ function combat()
             //update ui
             $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
 
-            setTimeout(function(){
+            setTimeout(function () {
                 $newEnemyBtn.show();
             }, animationWaitTime);
 
@@ -399,73 +454,79 @@ function combat()
         }
 
         moveAvaliable = true;
-        $rollDiceBtn.prop('disabled', false);
-
+        $rollDiceBtn.prop("disabled", false);
     }, animationWaitTime);
-
 }
 
-function monsterRoll()
-{
+function monsterRoll() {
     const rollingDice1 = gameDice.roll();
     const rollingDice2 = gameDice.roll();
 
     //roll dice game logic
-    const roundValue = getRoundValue(rollingDice1, rollingDice2);
+    const roundValue = getRoundValue(rollingDice1, rollingDice2, "monster");
     monsterCurrentRoundValue += roundValue;
 
     //display log
-    displayGameLog(`${currentMonster.name} rolled a ${rollingDice1} and a ${rollingDice2}, round value is ${roundValue}`, "monster");
+    displayGameLog(
+        `🎲${currentMonster.name} rolled a ${rollingDice1} and a ${rollingDice2}, round value is ${roundValue}`,
+        "monster"
+    );
 
     //display combat visual
     $combatArea.empty();
-    $combatArea.append(`<div>${gameDice.getDiceFace(rollingDice1).outerHTML}</div>`);
-    $combatArea.append(`<div>${gameDice.getDiceFace(rollingDice2).outerHTML}</div>`);
+    $combatArea.append(
+        `<div>${gameDice.getDiceFace(rollingDice1).outerHTML}</div>`
+    );
+    $combatArea.append(
+        `<div>${gameDice.getDiceFace(rollingDice2).outerHTML}</div>`
+    );
 
     //UI Update
     $monsterCurrentRoundValue.text(`Power: ${monsterCurrentRoundValue}`);
-    
 
     //monster animation when rolling dice
     monsterRollAnimate();
 }
 
-function getRoundValue(rollingDice1, rollingDice2)
-{
+function getRoundValue(rollingDice1, rollingDice2, currentRoller) {
     let roundValue = 0;
 
-    if(rollingDice1 == 1 || rollingDice2 == 1)
-    {
+    if (rollingDice1 == 1 || rollingDice2 == 1) {
         roundValue = 0;
-        return roundValue;
-    }
-    else if(rollingDice1 == rollingDice2)
-    {
+    } else if (rollingDice1 == rollingDice2) {
         roundValue = (rollingDice1 + rollingDice2) * 2;
-        return roundValue;
-    }
-    else
-    {
+    } else {
         roundValue = rollingDice1 + rollingDice2;
-        return roundValue;
     }
+
+    //skill effect
+    if (currentRoller == "player") {
+        //display log
+        displayGameLog(
+            `🎲You rolled a ${rollingDice1} and a ${rollingDice2}, your round value is ${roundValue}`
+        );
+
+        for (const skill of skillList) {
+            if (skill.skillTiming == "afterRoll" &&
+                skill.bought == true) {
+                skill.skillFunction(rollingDice1, rollingDice2);
+            }
+        }
+    }
+
+    return roundValue;
 }
 
-function displayGameLog(displayText, logSource="player")
-{
-    //display log 
-    if(logSource == "player")
-    {
+function displayGameLog(displayText, logSource = "player") {
+    //display log
+    if (logSource == "player") {
         $gameLog.append(`<p>${displayText}</p>`);
-    }
-    else if(logSource == "monster")
-    {
+    } else if (logSource == "monster") {
         $gameLog.append(`<p class="monster-log">${displayText}</p>`);
     }
 
     //remove first log if there are more than 10 log
-    if($(".game-log p").length > 10)
-    {
+    if ($(".game-log p").length > 10) {
         $(".game-log p").first().remove();
     }
 
@@ -473,8 +534,7 @@ function displayGameLog(displayText, logSource="player")
     $gameLog.scrollTop(9999);
 }
 
-function run()
-{
+function run() {
     displayGameLog(`You got scared by ${currentMonster.name} and ran away`);
     clearTimeout(monsterAnimationHandler);
 
@@ -484,19 +544,19 @@ function run()
     $monsterAttibute.text(`Attack: 0 Defence: 0`);
     $monsterCurrentRoundValue.text(`Power: 0`);
 
-    monsterImgContainer.getContext('2d').clearRect(0, 0, monsterImgContainer.width, monsterImgContainer.height);
+    monsterImgContainer
+        .getContext("2d")
+        .clearRect(0, 0, monsterImgContainer.width, monsterImgContainer.height);
 
     $rollDiceBtn.hide();
     $runBtn.hide();
     $newEnemyBtn.show();
 }
-
 //#endregion
 
 
 //#region statPanel
-function showStatPanel()
-{
+function showStatPanel() {
     $statPanel.show();
 
     //update stat panel information
@@ -504,13 +564,74 @@ function showStatPanel()
     $totalXpEarnedText.text(`${statData.totalXpEarned}`);
     $totalEnemyKilledText.text(`${statData.totalEnemyKilled}`);
     $totalPlayerDeathText.text(`${statData.totalPlayerDeath}`);
-    
 }
 //#endregion
 
+
+//#region shopPanel
+function refreshShopItems() {
+    $shopItemContainer.empty();
+
+    for (let i = 0; i < shop.length; i++) {
+        if (shop[i].bought == false) {
+            const shopItem = shop[i];
+            const shopItemElement = $(`<div class="shop-item"></div>`);
+            shopItemElement.append(`<h3>${shopItem.name}</h3>`);
+            shopItemElement.append(`<p>Cost: ${shopItem.cost}Gold</p>`);
+            shopItemElement.append(`<p>${shopItem.description}</p>`);
+            shopItemElement.append(`<button class="buy-btn">Buy</button>`);
+
+            shopItemElement.find(".buy-btn").click(function () {
+                shop[i].buy();
+                refreshShopItems();
+
+                //updata ui
+                $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
+                $playerAttibute.text(
+                    `Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`
+                );
+            });
+
+            $shopItemContainer.append(shopItemElement);
+        }
+
+    }
+}
+//#endregion
+
+
+//#region skillPanel
+function refreshSkillPanel() {
+    $skillItemContainer.empty();
+
+    for (let i = 0; i < skillList.length; i++) {
+        if (skillList[i].bought == false) {
+            const skill = skillList[i];
+            const skillElement = $(`<div class="skill-item"></div>`);
+            skillElement.append(`<h3>${skill.name}</h3>`);
+            skillElement.append(`<p>Cost: ${skill.cost}XP</p>`);
+            skillElement.append(`<p>${skill.description}</p>`);
+            skillElement.append(`<button class="buy-btn">Buy</button>`);
+
+            skillElement.find(".buy-btn").click(function () {
+                skill.buy();
+                refreshSkillPanel();
+
+                //updata ui
+                $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
+            });
+
+            $skillItemContainer.append(skillElement);
+        }
+
+    }
+}
+//#endregion
+
+
+
 //#region ----------------------------------------------------------animation template functions----------------------------------------------------------
-function playerIdleAniamte()
-{
+function playerIdleAniamte() {
     clearTimeout(playerAnimationHandler);
 
     animate(
@@ -524,8 +645,7 @@ function playerIdleAniamte()
     );
 }
 
-function playerDeathAniamte()
-{
+function playerDeathAniamte() {
     clearTimeout(playerAnimationHandler);
 
     animate(
@@ -542,8 +662,7 @@ function playerDeathAniamte()
     );
 }
 
-function playerShieldAnimate()
-{
+function playerShieldAnimate() {
     clearTimeout(playerAnimationHandler);
 
     animate(
@@ -559,8 +678,7 @@ function playerShieldAnimate()
     );
 }
 
-function playerRollAnimate()
-{
+function playerRollAnimate() {
     clearTimeout(playerAnimationHandler);
 
     animate(
@@ -576,8 +694,7 @@ function playerRollAnimate()
     );
 }
 
-function playerAttackAnimate()
-{
+function playerAttackAnimate() {
     clearTimeout(playerAnimationHandler);
 
     animate(
@@ -593,8 +710,7 @@ function playerAttackAnimate()
     );
 }
 
-function monsterIdleAniamte()
-{
+function monsterIdleAniamte() {
     clearTimeout(monsterAnimationHandler);
 
     animate(
@@ -608,8 +724,7 @@ function monsterIdleAniamte()
     );
 }
 
-function monsterAttackAnimate()
-{
+function monsterAttackAnimate() {
     clearTimeout(monsterAnimationHandler);
 
     animate(
@@ -625,8 +740,7 @@ function monsterAttackAnimate()
     );
 }
 
-function monsterRollAnimate()
-{
+function monsterRollAnimate() {
     clearTimeout(monsterAnimationHandler);
 
     animate(
@@ -642,8 +756,7 @@ function monsterRollAnimate()
     );
 }
 
-function monsterDefenceAnimate()
-{
+function monsterDefenceAnimate() {
     clearTimeout(monsterAnimationHandler);
 
     animate(
@@ -659,8 +772,7 @@ function monsterDefenceAnimate()
     );
 }
 
-function monsterDeathAnimate()
-{
+function monsterDeathAnimate() {
     clearTimeout(monsterAnimationHandler);
 
     animate(
