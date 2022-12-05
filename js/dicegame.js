@@ -7,6 +7,7 @@ const $gamePanel = $(".game-panel");
 const $statPanel = $(".stat-panel");
 const $shopPanel = $(".shop-panel");
 const $skillPanel = $(".skill-panel");
+const $howPanel = $(".how-panel");
 const $currencyDisplay = $(".currency");
 
 //game panel
@@ -20,6 +21,7 @@ const $roundInfo = $(".round-info");
 const $statBtn = $(".stat-btn");
 const $shopBtn = $(".shop-btn");
 const $skillBtn = $(".skill-btn");
+const $howBtn = $(".how-btn");
 
 const $playerHealthBarText = $(".player-health-bar .hp-bar-text");
 const $playerHealthBarFill = $(".player-health-bar .hp-bar-fill");
@@ -50,6 +52,9 @@ const $shopItemContainer = $(".shop-item-container");
 //skill panel
 const $skillCloseBtn = $(".skill-panel-close");
 const $skillItemContainer = $(".skill-container");
+
+//how panel
+const $howCloseBtn = $(".how-panel-close");
 
 // -------------------------------------------------variables-------------------------------------------------
 //game data
@@ -146,6 +151,11 @@ $skillBtn.on("click", function () {
     refreshSkillPanel();
 });
 
+$howBtn.on("click", function () {
+    $gamePanel.hide();
+    $howPanel.show();
+});
+
 //stat panel
 $statCloseBtn.on("click", function () {
     $statPanel.hide();
@@ -163,6 +173,12 @@ $skillCloseBtn.on("click", function () {
     $skillPanel.hide();
     $gamePanel.show();
 });
+
+//how panel
+$howCloseBtn.on("click", function () {
+    $howPanel.hide();
+    $gamePanel.show();
+});
 //#endregion
 
 //-------------------------------------------------functions-------------------------------------------------
@@ -175,6 +191,7 @@ function init() {
     $statPanel.hide();
     $shopPanel.hide();
     $skillPanel.hide();
+    $howPanel.hide();
 
     //init game data
     $monsterHealthBarFill.css("width", "0%");
@@ -630,6 +647,10 @@ function refreshSkillPanel() {
             $skillItemContainer.append(skillElement);
         }
     }
+
+    $skillItemContainer.$(".skill-item").each(function () {
+
+    });
 }
 //#endregion
 
