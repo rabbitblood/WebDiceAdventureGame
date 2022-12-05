@@ -60,7 +60,7 @@ const monsterList = [
     new chicken(),
     new angryPig(),
     new rino(),
-    new ghost()
+    new ghost(),
 ];
 const playerData = new player();
 const statData = new stat();
@@ -79,7 +79,7 @@ const shop = [
     new meatStew(playerData),
     new krakenSoup(playerData),
     new giantWine(playerData),
-    new gaeaEssence(playerData)
+    new gaeaEssence(playerData),
 ];
 const skillList = [
     new increasePower(),
@@ -87,7 +87,7 @@ const skillList = [
     new diceMaster(),
     new evenBetter(),
     new luckyCharm(),
-    new undeadKing()
+    new undeadKing(),
 ];
 
 let currentMonster;
@@ -169,6 +169,8 @@ $skillCloseBtn.on("click", function () {
 init();
 
 function init() {
+    loadGameData();
+
     $gamePanel.show();
     $statPanel.hide();
     $shopPanel.hide();
@@ -250,8 +252,6 @@ function rollDice() {
     const roundValue = getRoundValue(rollingDice1, rollingDice2, "player");
     playerCurrentRoundValue += roundValue;
 
-
-
     //display combat visual
     $combatArea.empty();
     $combatArea.append(
@@ -302,8 +302,7 @@ function combat() {
 
     //before combat skill
     for (const skill of skillList) {
-        if (skill.skillTiming == "beforeCombat" &&
-            skill.bought == true) {
+        if (skill.skillTiming == "beforeCombat" && skill.bought == true) {
             skill.skillFunction();
         }
     }
@@ -408,6 +407,8 @@ function combat() {
             //update ui
             $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
 
+            saveGame();
+
             setTimeout(function () {
                 $newEnemyBtn.show();
             }, animationWaitTime);
@@ -445,6 +446,8 @@ function combat() {
 
             //update ui
             $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
+
+            saveGame();
 
             setTimeout(function () {
                 $newEnemyBtn.show();
@@ -507,8 +510,7 @@ function getRoundValue(rollingDice1, rollingDice2, currentRoller) {
         );
 
         for (const skill of skillList) {
-            if (skill.skillTiming == "afterRoll" &&
-                skill.bought == true) {
+            if (skill.skillTiming == "afterRoll" && skill.bought == true) {
                 skill.skillFunction(rollingDice1, rollingDice2);
             }
         }
@@ -552,8 +554,11 @@ function run() {
     $runBtn.hide();
     $newEnemyBtn.show();
 }
-//#endregion
 
+function saveGame() {
+    saveGameData(playerGold, playerXp, statData, shop, skillList);
+}
+//#endregion
 
 //#region statPanel
 function showStatPanel() {
@@ -566,7 +571,6 @@ function showStatPanel() {
     $totalPlayerDeathText.text(`${statData.totalPlayerDeath}`);
 }
 //#endregion
-
 
 //#region shopPanel
 function refreshShopItems() {
@@ -590,15 +594,15 @@ function refreshShopItems() {
                 $playerAttibute.text(
                     `Attack:${playerData.playerAttack} Defence:${playerData.playerDefence}`
                 );
+
+                saveGame();
             });
 
             $shopItemContainer.append(shopItemElement);
         }
-
     }
 }
 //#endregion
-
 
 //#region skillPanel
 function refreshSkillPanel() {
@@ -619,16 +623,15 @@ function refreshSkillPanel() {
 
                 //updata ui
                 $currencyDisplay.text(`Gold: ${playerGold} Xp: ${playerXp}`);
+
+                saveGame();
             });
 
             $skillItemContainer.append(skillElement);
         }
-
     }
 }
 //#endregion
-
-
 
 //#region ----------------------------------------------------------animation template functions----------------------------------------------------------
 function playerIdleAniamte() {

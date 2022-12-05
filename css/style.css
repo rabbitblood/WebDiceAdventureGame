@@ -249,12 +249,8 @@ button:hover {
   width: 50%;
   text-align: center;
   padding: 10px;
-}/*# sourceMappingURL=style.css.map */
-
-.shop-panel-close,
-.skill-panel-close,
-.stat-panel-close{
-  text-align: end;
-  cursor: pointer;
-  font-size: 2em;
 }
+
+.img-preload-container {
+  display: none;
+}/*# sourceMappingURL=style.css.map */
